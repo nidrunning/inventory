@@ -657,7 +657,10 @@ async function doLogin() {
   err.classList.remove('show');
 
   try {
-    const res = await fetch(API + '?action=login&username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password));
+    const res = await fetch(API, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'login', username, password })
+    });
     const json = await res.json();
     if (json.ok) {
       currentUser = json.user; // { username, name, role }
