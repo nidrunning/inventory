@@ -710,6 +710,7 @@ function startApp() {
 
 function applyRoleUI() {
   const u = currentUser;
+  if (!u) return;
   const roleClass = 'role-' + u.role;
 
   // User badge
