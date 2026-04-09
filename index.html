@@ -661,17 +661,24 @@ async function doLogin() {
       method: 'POST',
       body: JSON.stringify({ action: 'login', username, password })
     });
-    const json = await res.json();
+    const text = await res.text();
+    let json;
+    try { json = JSON.parse(text); } catch(pe) {
+      showLoginErr('回應解析失敗，請重試');
+      btn.textContent = '登入'; btn.disabled = false;
+      return;
+    }
     if (json.ok) {
-      currentUser = json.user; // { username, name, role }
+      currentUser = json.user;
       sessionStorage.setItem('nid_user', JSON.stringify(currentUser));
+      btn.textContent = '登入'; btn.disabled = false;
       startApp();
     } else {
       showLoginErr('帳號或密碼錯誤，請重試');
       btn.textContent = '登入'; btn.disabled = false;
     }
   } catch(e) {
-    showLoginErr('連線失敗，請稍後再試');
+    showLoginErr('連線失敗：' + e.message);
     btn.textContent = '登入'; btn.disabled = false;
   }
 }
