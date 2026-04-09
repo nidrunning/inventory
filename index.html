@@ -23,6 +23,40 @@
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:'Noto Sans TC',sans-serif; background:var(--black); color:var(--white); min-height:100vh; }
 
+/* ── LOGIN SCREEN ── */
+.login-screen {
+  display:none; position:fixed; inset:0; background:var(--black);
+  z-index:9999; align-items:center; justify-content:center;
+}
+.login-screen.show { display:flex; }
+.login-box {
+  width:420px; max-width:95vw;
+  border:1px solid var(--border); border-radius:8px;
+  padding:48px 40px; background:#111;
+}
+.login-logo { text-align:center; margin-bottom:36px; }
+.login-logo .logo-main { font-family:'Bebas Neue',sans-serif; font-size:32px; letter-spacing:4px; }
+.login-logo .logo-tag { font-family:'DM Mono',monospace; font-size:10px; color:var(--accent); letter-spacing:2px; display:block; margin-top:4px; }
+.login-title { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2px; color:var(--gray); text-transform:uppercase; margin-bottom:24px; text-align:center; }
+.login-field { margin-bottom:16px; }
+.login-label { font-family:'DM Mono',monospace; font-size:10px; color:var(--gray); letter-spacing:1.5px; text-transform:uppercase; display:block; margin-bottom:6px; }
+.login-input {
+  width:100%; background:var(--input-bg); border:1px solid var(--border);
+  border-radius:4px; padding:12px 14px; color:var(--white);
+  font-family:'Noto Sans TC',sans-serif; font-size:14px; outline:none;
+  transition:border-color 0.2s;
+}
+.login-input:focus { border-color:var(--accent); }
+.login-btn {
+  width:100%; background:var(--accent); color:#fff; border:none;
+  font-family:'DM Mono',monospace; font-size:12px; letter-spacing:2px;
+  text-transform:uppercase; padding:14px; border-radius:4px;
+  cursor:pointer; margin-top:8px; transition:background 0.2s;
+}
+.login-btn:hover { background:#d44515; }
+.login-err { color:var(--accent); font-family:'DM Mono',monospace; font-size:11px; margin-top:12px; text-align:center; display:none; }
+.login-err.show { display:block; }
+
 /* ── HEADER ── */
 .header {
   display:flex; align-items:center; justify-content:space-between;
@@ -39,6 +73,34 @@ body { font-family:'Noto Sans TC',sans-serif; background:var(--black); color:var
 .sync-dot.online { background:var(--green); animation:pulse 2s infinite; }
 .sync-dot.loading { background:var(--yellow); animation:pulse 0.5s infinite; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+/* User badge */
+.user-badge {
+  display:flex; align-items:center; gap:8px;
+  background:rgba(255,255,255,0.04); border:1px solid var(--border);
+  border-radius:20px; padding:5px 12px 5px 8px;
+}
+.user-avatar {
+  width:24px; height:24px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Bebas Neue',sans-serif; font-size:13px;
+}
+.role-admin .user-avatar { background:rgba(232,82,26,0.2); color:var(--accent); }
+.role-warehouse .user-avatar { background:rgba(26,140,232,0.2); color:var(--blue); }
+.role-pr .user-avatar { background:rgba(155,89,182,0.2); color:var(--purple); }
+.role-readonly .user-avatar { background:rgba(136,136,136,0.2); color:var(--gray); }
+.user-name { font-family:'DM Mono',monospace; font-size:11px; }
+.role-tag { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1px; text-transform:uppercase; }
+.role-admin .role-tag { color:var(--accent); }
+.role-warehouse .role-tag { color:var(--blue); }
+.role-pr .role-tag { color:var(--purple); }
+.role-readonly .role-tag { color:var(--gray); }
+.logout-btn {
+  font-family:'DM Mono',monospace; font-size:10px; color:var(--gray);
+  background:none; border:none; cursor:pointer; padding:2px 4px;
+  transition:color 0.2s; letter-spacing:1px;
+}
+.logout-btn:hover { color:var(--white); }
 
 /* ── TABS ── */
 .nav { display:flex; padding:0 32px; border-bottom:1px solid var(--border); background:#0d0d0d; overflow-x:auto; }
@@ -100,10 +162,6 @@ tbody tr { transition:background 0.15s; }
 tbody tr:hover { background:rgba(255,255,255,0.03); }
 .pname { font-weight:500; }
 .psku { font-family:'DM Mono',monospace; font-size:10px; color:var(--gray); margin-top:2px; }
-.tag { display:inline-block; font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1px;
-  text-transform:uppercase; padding:3px 8px; border-radius:2px; }
-.tag-apparel { background:rgba(232,82,26,0.15); color:var(--accent); border:1px solid rgba(232,82,26,0.3); }
-.tag-acc { background:rgba(26,140,232,0.15); color:var(--blue); border:1px solid rgba(26,140,232,0.3); }
 .snum { font-family:'DM Mono',monospace; font-size:14px; font-weight:500; }
 .sbar { height:3px; background:rgba(255,255,255,0.08); border-radius:2px; margin-top:5px; width:70px; }
 .sfill { height:100%; border-radius:2px; }
@@ -114,6 +172,7 @@ tbody tr:hover { background:rgba(255,255,255,0.03); }
 .green { color:var(--green); }
 .orange { color:var(--accent); }
 .blue { color:var(--blue); }
+.hidden-col { color:rgba(255,255,255,0.15); font-size:11px; font-style:italic; }
 
 /* Ship type tags */
 .stype { display:inline-block; font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1px;
@@ -179,6 +238,20 @@ tbody tr:hover { background:rgba(255,255,255,0.03); }
 .type-opt.sel-other { border-color:var(--yellow); background:rgba(241,196,15,0.08); }
 .divider { border:none; border-top:1px solid var(--border); margin:20px 0; }
 
+/* ── USERS TAB ── */
+.users-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:14px; margin-bottom:24px; }
+.user-card { background:var(--card); border:1px solid var(--border); border-radius:6px; padding:20px; display:flex; align-items:center; gap:14px; }
+.user-card-avatar { width:42px; height:42px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Bebas Neue',sans-serif; font-size:18px; flex-shrink:0; }
+.user-card-info { flex:1; }
+.user-card-name { font-size:14px; font-weight:500; margin-bottom:3px; }
+.user-card-role { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:1px; text-transform:uppercase; }
+.user-card-actions { display:flex; gap:6px; }
+.role-pill { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1px; text-transform:uppercase; padding:3px 10px; border-radius:20px; display:inline-block; }
+.role-pill-admin { background:rgba(232,82,26,0.15); color:var(--accent); }
+.role-pill-warehouse { background:rgba(26,140,232,0.15); color:var(--blue); }
+.role-pill-pr { background:rgba(155,89,182,0.15); color:var(--purple); }
+.role-pill-readonly { background:rgba(136,136,136,0.15); color:var(--gray); }
+
 /* Toast */
 .toast { position:fixed; bottom:28px; right:28px; background:#1a1a1a;
   border:1px solid var(--border); border-left:3px solid var(--accent);
@@ -221,122 +294,165 @@ tbody tr:hover { background:rgba(255,255,255,0.03); }
   .type-grid { grid-template-columns:repeat(2,1fr); }
   .breakdown-grid { grid-template-columns:1fr; }
   .form-row { grid-template-columns:1fr; }
+  .user-badge .user-name { display:none; }
 }
 </style>
 </head>
 <body>
 
-<header class="header">
-  <div class="logo">
-    <span class="logo-main">NID Running</span>
-    <span class="logo-tag">庫存系統</span>
-  </div>
-  <div class="header-actions">
-    <div class="sync-status">
-      <div class="sync-dot" id="syncDot"></div>
-      <span id="syncText">連線中...</span>
+<!-- ── LOGIN SCREEN ── -->
+<div class="login-screen show" id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="logo-main">NID Running</div>
+      <span class="logo-tag">庫存系統</span>
     </div>
-    <button class="btn btn-secondary btn-sm" onclick="refreshAll()">↻ 重新整理</button>
-    <button class="btn btn-primary" onclick="openModal('addShipping')">+ 記錄出貨</button>
-  </div>
-</header>
-
-<nav class="nav">
-  <div class="tab active" onclick="switchTab('overview',this)">總覽</div>
-  <div class="tab" onclick="switchTab('inventory',this)">庫存管理</div>
-  <div class="tab" onclick="switchTab('shipping',this)">出貨紀錄</div>
-  <div class="tab" onclick="switchTab('stats',this)">銷售分析</div>
-</nav>
-
-<main class="main">
-
-  <!-- 總覽 -->
-  <div id="panel-overview" class="panel active">
-    <div class="stats" id="statsCards"></div>
-    <div class="sec-hdr">
-      <div class="sec-title">庫存快覽</div>
-      <button class="btn btn-secondary btn-sm" onclick="openModal('addShipping')">記錄出貨</button>
+    <div class="login-title">請登入以繼續</div>
+    <div class="login-field">
+      <label class="login-label">帳號</label>
+      <input type="text" class="login-input" id="loginUser" placeholder="輸入帳號" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()">
     </div>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr>
-          <th>商品</th><th>顏色/尺寸</th><th>現貨</th><th>已售</th><th>售價</th><th>累積營收</th>
-        </tr></thead>
-        <tbody id="overviewBody"><tr class="loading-row"><td colspan="6"><span class="spinner"></span>從 Google Sheet 讀取中...</td></tr></tbody>
-      </table>
+    <div class="login-field">
+      <label class="login-label">密碼</label>
+      <input type="password" class="login-input" id="loginPass" placeholder="輸入密碼" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
     </div>
+    <button class="login-btn" id="loginBtn" onclick="doLogin()">登入</button>
+    <div class="login-err" id="loginErr">帳號或密碼錯誤，請重試</div>
   </div>
+</div>
 
-  <!-- 庫存管理 -->
-  <div id="panel-inventory" class="panel">
-    <div class="sec-hdr">
-      <div class="sec-title">所有商品</div>
-      <div style="display:flex;gap:10px;">
-        <button class="btn btn-secondary btn-sm" onclick="openModal('adjustStock')">調整庫存</button>
+<!-- ── APP ── -->
+<div id="app" style="display:none;">
+  <header class="header">
+    <div class="logo">
+      <span class="logo-main">NID Running</span>
+      <span class="logo-tag">庫存系統</span>
+    </div>
+    <div class="header-actions">
+      <div class="sync-status">
+        <div class="sync-dot" id="syncDot"></div>
+        <span id="syncText">連線中...</span>
       </div>
-    </div>
-    <div class="tbl-wrap">
-      <div class="tbl-toolbar">
-        <div class="search">
-          <span style="color:var(--gray)">🔍</span>
-          <input type="text" placeholder="搜尋商品名稱、SKU..." id="searchInput" oninput="renderInventory()">
+      <button class="btn btn-secondary btn-sm" onclick="refreshAll()">↻ 重新整理</button>
+      <button class="btn btn-primary" id="headerShipBtn" onclick="openModal('addShipping')">+ 記錄出貨</button>
+      <div class="user-badge" id="userBadge">
+        <div class="user-avatar" id="userAvatar"></div>
+        <div>
+          <div class="user-name" id="userNameDisplay"></div>
+          <div class="role-tag" id="roleTagDisplay"></div>
         </div>
-        <div style="display:flex;gap:8px;">
-          <button class="btn btn-ghost btn-sm" onclick="setCatFilter('',this)" id="cf-all" style="color:var(--white)">全部</button>
-          <button class="btn btn-ghost btn-sm" onclick="setCatFilter('藍',this)" id="cf-blue">藍色</button>
-          <button class="btn btn-ghost btn-sm" onclick="setCatFilter('黑',this)" id="cf-black">黑色</button>
+        <button class="logout-btn" onclick="doLogout()" title="登出">✕</button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="nav" id="mainNav">
+    <div class="tab active" onclick="switchTab('overview',this)">總覽</div>
+    <div class="tab" onclick="switchTab('inventory',this)">庫存管理</div>
+    <div class="tab" onclick="switchTab('shipping',this)">出貨紀錄</div>
+    <div class="tab" onclick="switchTab('stats',this)">銷售分析</div>
+    <div class="tab" id="usersTab" onclick="switchTab('users',this)" style="display:none;">帳號管理</div>
+  </nav>
+
+  <main class="main">
+    <!-- 總覽 -->
+    <div id="panel-overview" class="panel active">
+      <div class="stats" id="statsCards"></div>
+      <div class="sec-hdr">
+        <div class="sec-title">庫存快覽</div>
+        <button class="btn btn-secondary btn-sm" id="overviewShipBtn" onclick="openModal('addShipping')">記錄出貨</button>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr>
+            <th>商品</th><th>顏色/尺寸</th><th>現貨</th><th>已售</th><th>售價</th><th id="revenueColHdr">累積營收</th>
+          </tr></thead>
+          <tbody id="overviewBody"><tr class="loading-row"><td colspan="6"><span class="spinner"></span>從 Google Sheet 讀取中...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 庫存管理 -->
+    <div id="panel-inventory" class="panel">
+      <div class="sec-hdr">
+        <div class="sec-title">所有商品</div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-secondary btn-sm" id="adjustStockBtn" onclick="openModal('adjustStock')">調整庫存</button>
         </div>
       </div>
-      <table>
-        <thead><tr>
-          <th>商品ID</th><th>商品名稱</th><th>顏色/尺寸</th><th>進貨成本</th><th>售價</th><th>初始庫存</th><th>現貨庫存</th><th>已售</th>
-        </tr></thead>
-        <tbody id="inventoryBody"><tr class="loading-row"><td colspan="8"><span class="spinner"></span>讀取中...</td></tr></tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- 出貨紀錄 -->
-  <div id="panel-shipping" class="panel">
-    <div class="sec-hdr">
-      <div class="sec-title">出貨紀錄</div>
-      <button class="btn btn-primary" onclick="openModal('addShipping')">+ 記錄出貨</button>
-    </div>
-    <div class="ship-sum" id="shipSum"></div>
-    <div class="pills">
-      <button class="pill all on" onclick="setShipFilter('all',this)">全部</button>
-      <button class="pill ec" onclick="setShipFilter('電商出貨',this)">電商出貨</button>
-      <button class="pill pr" onclick="setShipFilter('公關出貨',this)">公關出貨</button>
-      <button class="pill staff" onclick="setShipFilter('員購出貨',this)">員購出貨</button>
-      <button class="pill other" onclick="setShipFilter('其他出貨',this)">其他出貨</button>
-    </div>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr>
-          <th>日期</th><th>類型</th><th>商品</th><th>數量</th><th>單價</th><th>小計</th><th>備註</th><th>出貨倉</th>
-        </tr></thead>
-        <tbody id="shippingBody"><tr class="loading-row"><td colspan="8"><span class="spinner"></span>讀取中...</td></tr></tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- 銷售分析 -->
-  <div id="panel-stats" class="panel">
-    <div class="sec-title" style="margin-bottom:20px;">銷售分析</div>
-    <div class="stats" id="statsCards2"></div>
-    <div class="breakdown-grid">
-      <div class="breakdown-card">
-        <div class="breakdown-header"><div class="sec-title" style="font-size:16px;">出貨類型佔比</div></div>
-        <div class="breakdown-body" id="typeBreakdown"></div>
-      </div>
-      <div class="breakdown-card">
-        <div class="breakdown-header"><div class="sec-title" style="font-size:16px;">熱銷商品 Top 8</div></div>
-        <div class="breakdown-body" id="topProducts"></div>
+      <div class="tbl-wrap">
+        <div class="tbl-toolbar">
+          <div class="search">
+            <span style="color:var(--gray)">🔍</span>
+            <input type="text" placeholder="搜尋商品名稱、SKU..." id="searchInput" oninput="renderInventory()">
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-ghost btn-sm" onclick="setCatFilter('',this)" id="cf-all" style="color:var(--white)">全部</button>
+            <button class="btn btn-ghost btn-sm" onclick="setCatFilter('藍',this)" id="cf-blue">藍色</button>
+            <button class="btn btn-ghost btn-sm" onclick="setCatFilter('黑',this)" id="cf-black">黑色</button>
+          </div>
+        </div>
+        <table>
+          <thead><tr>
+            <th>商品ID</th><th>商品名稱</th><th>顏色/尺寸</th><th id="costColHdr">進貨成本</th><th>售價</th><th>初始庫存</th><th>現貨庫存</th><th>已售</th>
+          </tr></thead>
+          <tbody id="inventoryBody"><tr class="loading-row"><td colspan="8"><span class="spinner"></span>讀取中...</td></tr></tbody>
+        </table>
       </div>
     </div>
-  </div>
 
-</main>
+    <!-- 出貨紀錄 -->
+    <div id="panel-shipping" class="panel">
+      <div class="sec-hdr">
+        <div class="sec-title">出貨紀錄</div>
+        <button class="btn btn-primary" id="shippingPageBtn" onclick="openModal('addShipping')">+ 記錄出貨</button>
+      </div>
+      <div class="ship-sum" id="shipSum"></div>
+      <div class="pills">
+        <button class="pill all on" onclick="setShipFilter('all',this)">全部</button>
+        <button class="pill ec" onclick="setShipFilter('電商出貨',this)">電商出貨</button>
+        <button class="pill pr" onclick="setShipFilter('公關出貨',this)">公關出貨</button>
+        <button class="pill staff" onclick="setShipFilter('員購出貨',this)">員購出貨</button>
+        <button class="pill other" onclick="setShipFilter('其他出貨',this)">其他出貨</button>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr>
+            <th>日期</th><th>類型</th><th>商品</th><th>數量</th><th>單價</th><th id="subtotalColHdr">小計</th><th>備註</th><th>出貨倉</th>
+          </tr></thead>
+          <tbody id="shippingBody"><tr class="loading-row"><td colspan="8"><span class="spinner"></span>讀取中...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 銷售分析 -->
+    <div id="panel-stats" class="panel">
+      <div class="sec-title" style="margin-bottom:20px;">銷售分析</div>
+      <div class="stats" id="statsCards2"></div>
+      <div class="breakdown-grid">
+        <div class="breakdown-card">
+          <div class="breakdown-header"><div class="sec-title" style="font-size:16px;">出貨類型佔比</div></div>
+          <div class="breakdown-body" id="typeBreakdown"></div>
+        </div>
+        <div class="breakdown-card">
+          <div class="breakdown-header"><div class="sec-title" style="font-size:16px;">熱銷商品 Top 8</div></div>
+          <div class="breakdown-body" id="topProducts"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 帳號管理 (管理員限定) -->
+    <div id="panel-users" class="panel">
+      <div class="sec-hdr">
+        <div class="sec-title">帳號管理</div>
+        <button class="btn btn-primary" onclick="openModal('addUser')">+ 新增帳號</button>
+      </div>
+      <div class="users-grid" id="usersGrid">
+        <div style="color:var(--gray);font-family:'DM Mono',monospace;font-size:12px;">載入中...</div>
+      </div>
+    </div>
+  </main>
+</div>
 
 <!-- 記錄出貨 Modal -->
 <div class="overlay" id="modal-addShipping">
@@ -347,11 +463,11 @@ tbody tr:hover { background:rgba(255,255,255,0.03); }
     </div>
     <div class="modal-body">
       <div class="form-label" style="margin-bottom:8px;">出貨類型</div>
-      <div class="type-grid">
-        <div class="type-opt" onclick="selType('電商出貨',this)"><div class="ti">🛒</div><div class="tn">電商出貨</div></div>
-        <div class="type-opt" onclick="selType('公關出貨',this)"><div class="ti">🎁</div><div class="tn">公關出貨</div></div>
-        <div class="type-opt" onclick="selType('員購出貨',this)"><div class="ti">👕</div><div class="tn">員購出貨</div></div>
-        <div class="type-opt" onclick="selType('其他出貨',this)"><div class="ti">📦</div><div class="tn">其他出貨</div></div>
+      <div class="type-grid" id="typeGrid">
+        <div class="type-opt" id="type-ec" onclick="selType('電商出貨',this)"><div class="ti">🛒</div><div class="tn">電商出貨</div></div>
+        <div class="type-opt" id="type-pr" onclick="selType('公關出貨',this)"><div class="ti">🎁</div><div class="tn">公關出貨</div></div>
+        <div class="type-opt" id="type-staff" onclick="selType('員購出貨',this)"><div class="ti">👕</div><div class="tn">員購出貨</div></div>
+        <div class="type-opt" id="type-other" onclick="selType('其他出貨',this)"><div class="ti">📦</div><div class="tn">其他出貨</div></div>
       </div>
       <hr class="divider">
       <div class="form-row">
@@ -442,6 +558,56 @@ tbody tr:hover { background:rgba(255,255,255,0.03); }
   </div>
 </div>
 
+<!-- 新增帳號 Modal -->
+<div class="overlay" id="modal-addUser">
+  <div class="modal">
+    <div class="modal-hdr">
+      <div class="modal-title">新增帳號</div>
+      <button class="modal-close" onclick="closeModal('addUser')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">顯示名稱</label>
+          <input type="text" class="form-input" id="nu-name" placeholder="例：小明">
+        </div>
+        <div class="form-group">
+          <label class="form-label">帳號</label>
+          <input type="text" class="form-input" id="nu-username" placeholder="例：minchen">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">密碼</label>
+          <input type="password" class="form-input" id="nu-password" placeholder="至少 6 碼">
+        </div>
+        <div class="form-group">
+          <label class="form-label">角色</label>
+          <select class="form-select" id="nu-role">
+            <option value="admin">管理員</option>
+            <option value="warehouse">倉庫人員</option>
+            <option value="pr">公關業務</option>
+            <option value="readonly">唯讀</option>
+          </select>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:4px;padding:14px;margin-top:8px;">
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--gray);letter-spacing:1px;margin-bottom:10px;">角色權限說明</div>
+        <div style="font-size:12px;line-height:1.8;color:rgba(255,255,255,0.6);">
+          <b style="color:var(--accent)">管理員</b> — 全部功能 + 帳號管理<br>
+          <b style="color:var(--blue)">倉庫人員</b> — 出貨、調整庫存（不含成本數字）<br>
+          <b style="color:var(--purple)">公關業務</b> — 僅能記錄公關出貨<br>
+          <b style="color:var(--gray)">唯讀</b> — 僅查看，不能操作
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('addUser')">取消</button>
+      <button class="btn btn-primary" id="submitUserBtn" onclick="submitAddUser()">建立帳號</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -452,6 +618,146 @@ let shippings = [];
 let currentShipType = '';
 let catFilter = '';
 let shipFilter = 'all';
+
+// ── CURRENT USER ─────────────────────────────────────
+let currentUser = null;
+
+// ROLES: admin | warehouse | pr | readonly
+const ROLE_LABELS = {
+  admin: '管理員', warehouse: '倉庫人員', pr: '公關業務', readonly: '唯讀'
+};
+const ROLE_COLORS = {
+  admin: 'var(--accent)', warehouse: 'var(--blue)', pr: 'var(--purple)', readonly: 'var(--gray)'
+};
+
+function can(action) {
+  if (!currentUser) return false;
+  const role = currentUser.role;
+  const perms = {
+    ship:        ['admin','warehouse','pr'],
+    shipAll:     ['admin','warehouse'],      // 可用全部出貨類型
+    adjustStock: ['admin','warehouse'],
+    seeCost:     ['admin'],
+    seeRevenue:  ['admin'],
+    manageUsers: ['admin'],
+  };
+  return (perms[action]||[]).includes(role);
+}
+
+// ── LOGIN ─────────────────────────────────────────────
+async function doLogin() {
+  const username = document.getElementById('loginUser').value.trim();
+  const password = document.getElementById('loginPass').value;
+  const btn = document.getElementById('loginBtn');
+  const err = document.getElementById('loginErr');
+
+  if (!username || !password) { showLoginErr('請輸入帳號和密碼'); return; }
+
+  btn.textContent = '登入中...'; btn.disabled = true;
+  err.classList.remove('show');
+
+  try {
+    const res = await fetch(API + '?action=login&username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password));
+    const json = await res.json();
+    if (json.ok) {
+      currentUser = json.user; // { username, name, role }
+      sessionStorage.setItem('nid_user', JSON.stringify(currentUser));
+      startApp();
+    } else {
+      showLoginErr('帳號或密碼錯誤，請重試');
+      btn.textContent = '登入'; btn.disabled = false;
+    }
+  } catch(e) {
+    showLoginErr('連線失敗，請稍後再試');
+    btn.textContent = '登入'; btn.disabled = false;
+  }
+}
+
+function showLoginErr(msg) {
+  const err = document.getElementById('loginErr');
+  err.textContent = msg;
+  err.classList.add('show');
+}
+
+function doLogout() {
+  currentUser = null;
+  sessionStorage.removeItem('nid_user');
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('loginScreen').classList.add('show');
+  document.getElementById('loginUser').value = '';
+  document.getElementById('loginPass').value = '';
+  document.getElementById('loginErr').classList.remove('show');
+  document.getElementById('loginBtn').textContent = '登入';
+  document.getElementById('loginBtn').disabled = false;
+}
+
+function startApp() {
+  document.getElementById('loginScreen').classList.remove('show');
+  document.getElementById('app').style.display = 'block';
+  applyRoleUI();
+  refreshAll();
+}
+
+function applyRoleUI() {
+  const u = currentUser;
+  const roleClass = 'role-' + u.role;
+
+  // User badge
+  const badge = document.getElementById('userBadge');
+  badge.className = 'user-badge ' + roleClass;
+  document.getElementById('userAvatar').textContent = u.name.charAt(0).toUpperCase();
+  document.getElementById('userNameDisplay').textContent = u.name;
+  document.getElementById('roleTagDisplay').textContent = ROLE_LABELS[u.role] || u.role;
+
+  // Ship button visibility
+  const showShip = can('ship');
+  ['headerShipBtn','overviewShipBtn','shippingPageBtn'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.style.display = showShip ? '' : 'none';
+  });
+
+  // Adjust stock button
+  const adjBtn = document.getElementById('adjustStockBtn');
+  if(adjBtn) adjBtn.style.display = can('adjustStock') ? '' : 'none';
+
+  // Users tab
+  document.getElementById('usersTab').style.display = can('manageUsers') ? '' : 'none';
+
+  // Cost/revenue column headers
+  if (!can('seeCost')) {
+    const el = document.getElementById('costColHdr');
+    if(el) el.textContent = '售價資訊';
+  }
+  if (!can('seeRevenue')) {
+    const el = document.getElementById('revenueColHdr');
+    if(el) el.textContent = '—';
+    const el2 = document.getElementById('subtotalColHdr');
+    if(el2) el2.textContent = '—';
+  }
+
+  // PR role: only show PR type in modal
+  if (!can('shipAll')) {
+    ['type-ec','type-staff','type-other'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) { el.style.opacity='0.3'; el.style.pointerEvents='none'; }
+    });
+    // Auto-select PR type
+    currentShipType = '公關出貨';
+    const prEl = document.getElementById('type-pr');
+    if(prEl) prEl.classList.add('sel-pr');
+  }
+}
+
+// ── SESSION RESTORE ───────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = sessionStorage.getItem('nid_user');
+  if (saved) {
+    try {
+      currentUser = JSON.parse(saved);
+      startApp();
+    } catch(e) { /* show login */ }
+  }
+});
 
 // ── API ──────────────────────────────────────────────
 function setSyncStatus(status) {
@@ -474,11 +780,15 @@ async function fetchShippings() {
   if (json.ok) shippings = json.data;
 }
 
+async function fetchUsers() {
+  const res = await fetch(API + '?action=getUsers&requester=' + encodeURIComponent(currentUser.username));
+  const json = await res.json();
+  return json.ok ? json.data : [];
+}
+
 async function postData(body) {
-  const res = await fetch(API, {
-    method:'POST',
-    body: JSON.stringify(body)
-  });
+  body.requester = currentUser?.username;
+  const res = await fetch(API, { method:'POST', body: JSON.stringify(body) });
   return await res.json();
 }
 
@@ -496,18 +806,25 @@ async function refreshAll() {
 
 // ── RENDER ───────────────────────────────────────────
 function fmt(n) { return Number(n||0).toLocaleString(); }
+function mask(val) { return can('seeRevenue') ? '$'+fmt(val) : '<span class="hidden-col">—</span>'; }
+function maskCost(val) { return can('seeCost') ? '$'+fmt(val) : '<span class="hidden-col">—</span>'; }
 
 function renderStats(containerId) {
   const totalStock = products.reduce((a,p)=>a+(+p.currentStock||0),0);
   const totalSold = shippings.reduce((a,s)=>a+(+s.qty||0),0);
   const totalRev = shippings.reduce((a,s)=>a+(+s.subtotal||0),0);
   const totalProfit = products.reduce((a,p)=>a+(+p.profit||0),0);
+
+  const revCard = can('seeRevenue')
+    ? `<div class="stat s3"><div class="stat-label">累積營收 NT$</div><div class="stat-val">${fmt(totalRev)}</div><div class="stat-sub">含所有出貨</div></div>
+       <div class="stat s4"><div class="stat-label">毛利估算 NT$</div><div class="stat-val">${fmt(totalProfit)}</div><div class="stat-sub">扣除進貨成本</div></div>`
+    : `<div class="stat s3"><div class="stat-label">累積營收</div><div class="stat-val" style="font-size:20px;margin-top:8px;color:var(--gray)">—</div><div class="stat-sub">無檢視權限</div></div>
+       <div class="stat s4"><div class="stat-label">毛利估算</div><div class="stat-val" style="font-size:20px;margin-top:8px;color:var(--gray)">—</div><div class="stat-sub">無檢視權限</div></div>`;
+
   document.getElementById(containerId).innerHTML = `
     <div class="stat s1"><div class="stat-label">總庫存件數</div><div class="stat-val">${fmt(totalStock)}</div><div class="stat-sub">${products.length} 個 SKU</div></div>
     <div class="stat s2"><div class="stat-label">累積出貨件數</div><div class="stat-val">${fmt(totalSold)}</div><div class="stat-sub">${shippings.length} 筆紀錄</div></div>
-    <div class="stat s3"><div class="stat-label">累積營收 NT$</div><div class="stat-val">${fmt(totalRev)}</div><div class="stat-sub">含所有出貨</div></div>
-    <div class="stat s4"><div class="stat-label">毛利估算 NT$</div><div class="stat-val">${fmt(totalProfit)}</div><div class="stat-sub">扣除進貨成本</div></div>
-  `;
+    ${revCard}`;
 }
 
 function renderOverview() {
@@ -521,10 +838,10 @@ function renderOverview() {
       <td><div class="pname">${p.name}</div><div class="psku">${p.sku}</div></td>
       <td style="color:var(--gray);font-size:12px;">${p.spec}</td>
       <td><div class="snum" style="color:${lvl==='hi'?'var(--green)':lvl==='md'?'var(--yellow)':'var(--accent)'}">${stock}</div>
-        <div class="sbar"><div class="sfill ${lvl}" style="width:${pct}%"></div></div></td>
+      <div class="sbar"><div class="sfill ${lvl}" style="width:${pct}%"></div></div></td>
       <td><span class="mono orange">${sold}</span></td>
       <td><span class="mono">$${fmt(p.price)}</span></td>
-      <td><span class="mono green">$${fmt(p.revenue)}</span></td>
+      <td>${mask(p.revenue)}</td>
     </tr>`;
   }).join('') || '<tr><td colspan="6"><div class="empty">尚無商品資料</div></td></tr>';
   document.getElementById('overviewBody').innerHTML = rows;
@@ -543,7 +860,7 @@ function renderInventory() {
       <td class="mono" style="color:var(--gray);font-size:11px;">${p.id}</td>
       <td><div class="pname">${p.name}</div></td>
       <td style="font-size:12px;color:var(--gray);">${p.spec}</td>
-      <td class="mono" style="color:var(--gray);">$${fmt(p.cost)}</td>
+      <td>${maskCost(p.cost)}</td>
       <td class="mono">$${fmt(p.price)}</td>
       <td class="mono">${fmt(p.initStock)}</td>
       <td><span class="mono" style="color:${colMap[lvl]};font-weight:600;">${stock}</span></td>
@@ -558,9 +875,9 @@ function renderShipping() {
   const counts = {'電商出貨':0,'公關出貨':0,'員購出貨':0,'其他出貨':0};
   shippings.forEach(s => { if(counts[s.type]!==undefined) counts[s.type]+=+s.qty||0; });
   document.getElementById('shipSum').innerHTML = [
-    ['電商出貨','sn-ec','var(--blue)'],['公關出貨','sn-pr','var(--purple)'],
-    ['員購出貨','sn-staff','var(--green)'],['其他出貨','sn-other','var(--yellow)']
-  ].map(([lbl,,clr])=>`<div class="ssum"><div class="ssum-label">${lbl}</div><div class="ssum-val" style="color:${clr}">${counts[lbl]}</div></div>`).join('');
+    ['電商出貨','var(--blue)'],['公關出貨','var(--purple)'],
+    ['員購出貨','var(--green)'],['其他出貨','var(--yellow)']
+  ].map(([lbl,clr])=>`<div class="ssum"><div class="ssum-label">${lbl}</div><div class="ssum-val" style="color:${clr}">${counts[lbl]}</div></div>`).join('');
 
   let list = [...shippings].reverse();
   if (shipFilter !== 'all') list = list.filter(s => s.type === shipFilter);
@@ -572,7 +889,7 @@ function renderShipping() {
       <td><div class="pname" style="font-size:12px;">${s.productName||s.productId||'—'}</div></td>
       <td class="mono">${s.qty||0}</td>
       <td class="mono">${+s.price>0?'$'+fmt(s.price):'<span style="color:var(--gray)">免費</span>'}</td>
-      <td class="mono green">${+s.subtotal>0?'$'+fmt(s.subtotal):'-'}</td>
+      <td>${can('seeRevenue') ? (+s.subtotal>0?'<span class="mono green">$'+fmt(s.subtotal)+'</span>':'-') : '<span class="hidden-col">—</span>'}</td>
       <td style="font-size:12px;color:var(--gray);">${s.note||'—'}</td>
       <td class="mono" style="font-size:11px;color:var(--gray);">${s.warehouse||'屏東'}</td>
     </tr>`;
@@ -584,37 +901,57 @@ function renderStatsTab() {
   renderStats('statsCards2');
   const types = ['電商出貨','公關出貨','員購出貨','其他出貨'];
   const colors = ['var(--blue)','var(--purple)','var(--green)','var(--yellow)'];
-  const revByType = {};
-  const cntByType = {};
+  const revByType = {}; const cntByType = {};
   types.forEach(t => { revByType[t]=0; cntByType[t]=0; });
   shippings.forEach(s => {
-    if (revByType[s.type]!==undefined) {
-      revByType[s.type]+=+s.subtotal||0;
-      cntByType[s.type]+=+s.qty||0;
-    }
+    if (revByType[s.type]!==undefined) { revByType[s.type]+=+s.subtotal||0; cntByType[s.type]+=+s.qty||0; }
   });
   const totalRev = Object.values(revByType).reduce((a,b)=>a+b,0)||1;
   document.getElementById('typeBreakdown').innerHTML = types.map((t,i)=>`
     <div class="bar-row">
       <div class="bar-meta">
         <span class="bar-label" style="color:${colors[i]}">${t}</span>
-        <span class="bar-val" style="color:${colors[i]}">$${fmt(revByType[t])} · ${cntByType[t]}件</span>
+        <span class="bar-val" style="color:${colors[i]}">${can('seeRevenue')?'$'+fmt(revByType[t])+' · ':''} ${cntByType[t]}件</span>
       </div>
-      <div class="bar-track"><div class="bar-fill" style="width:${((revByType[t]/totalRev)*100).toFixed(1)}%;background:${colors[i]}"></div></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${((cntByType[t]/(Object.values(cntByType).reduce((a,b)=>a+b,0)||1))*100).toFixed(1)}%;background:${colors[i]}"></div></div>
     </div>`).join('');
 
-  const soldMap = {};
-  products.forEach(p=>{ soldMap[p.id]={name:p.name,spec:p.spec,qty:+p.sold||0}; });
-  const top = Object.values(soldMap).sort((a,b)=>b.qty-a.qty).slice(0,8);
-  const maxQ = top[0]?.qty||1;
+  const top = [...products].sort((a,b)=>(+b.sold||0)-(+a.sold||0)).slice(0,8);
+  const maxQ = +top[0]?.sold||1;
   document.getElementById('topProducts').innerHTML = top.map((p,i)=>`
     <div class="bar-row">
       <div class="bar-meta">
         <span class="bar-label">${i+1}. ${p.name} <span style="color:var(--gray);font-size:11px;">${p.spec}</span></span>
-        <span class="bar-val" style="color:var(--accent)">${p.qty}件</span>
+        <span class="bar-val" style="color:var(--accent)">${+p.sold||0}件</span>
       </div>
-      <div class="bar-track"><div class="bar-fill" style="width:${(p.qty/maxQ*100).toFixed(1)}%;background:var(--accent);opacity:${1-i*0.1}"></div></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${((+p.sold||0)/maxQ*100).toFixed(1)}%;background:var(--accent);opacity:${1-i*0.1}"></div></div>
     </div>`).join('') || '<div class="empty">尚無銷售資料</div>';
+}
+
+async function renderUsers() {
+  if (!can('manageUsers')) return;
+  const users = await fetchUsers();
+  const roleInfo = {
+    admin: { label:'管理員', color:'var(--accent)', bg:'rgba(232,82,26,0.15)', pill:'role-pill-admin' },
+    warehouse: { label:'倉庫人員', color:'var(--blue)', bg:'rgba(26,140,232,0.15)', pill:'role-pill-warehouse' },
+    pr: { label:'公關業務', color:'var(--purple)', bg:'rgba(155,89,182,0.15)', pill:'role-pill-pr' },
+    readonly: { label:'唯讀', color:'var(--gray)', bg:'rgba(136,136,136,0.15)', pill:'role-pill-readonly' },
+  };
+  document.getElementById('usersGrid').innerHTML = users.map(u => {
+    const ri = roleInfo[u.role] || roleInfo.readonly;
+    const isSelf = u.username === currentUser.username;
+    return `<div class="user-card">
+      <div class="user-card-avatar" style="background:${ri.bg};color:${ri.color};">${u.name.charAt(0).toUpperCase()}</div>
+      <div class="user-card-info">
+        <div class="user-card-name">${u.name} ${isSelf?'<span style="font-size:10px;color:var(--gray);">(你)</span>':''}</div>
+        <div style="font-family:\'DM Mono\',monospace;font-size:10px;color:var(--gray);margin-bottom:6px;">@${u.username}</div>
+        <span class="role-pill ${ri.pill}">${ri.label}</span>
+      </div>
+      ${!isSelf ? `<div class="user-card-actions">
+        <button class="btn btn-ghost btn-sm" onclick="deleteUser('${u.username}','${u.name}')" style="color:var(--accent);font-size:18px;padding:4px 8px;">✕</button>
+      </div>` : ''}
+    </div>`;
+  }).join('') || '<div style="color:var(--gray);font-family:\'DM Mono\',monospace;font-size:12px;">尚無帳號資料</div>';
 }
 
 function renderAll() {
@@ -631,6 +968,7 @@ function switchTab(name, el) {
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('panel-'+name).classList.add('active');
   el.classList.add('active');
+  if (name === 'users') renderUsers();
 }
 
 // ── FILTERS ──────────────────────────────────────────
@@ -651,14 +989,18 @@ function setShipFilter(val, btn) {
 // ── MODALS ────────────────────────────────────────────
 function openModal(name) {
   if (name === 'addShipping') {
+    if (!can('ship')) { toast('您沒有出貨權限','error'); return; }
     const sel = document.getElementById('s-product');
     sel.innerHTML = '<option value="">請選擇商品</option>' +
-      products.map(p=>`<option value="${p.id}" data-price="${p.price}" data-stock="${p.currentStock}">${p.name} ${p.spec}（庫存:${+p.currentStock||0}）</option>`).join('');
+      products.map(p=>`<option value="${p.id}" data-price="${p.price}">${p.name} ${p.spec}（庫存:${+p.currentStock||0}）</option>`).join('');
     document.getElementById('s-date').value = new Date().toISOString().split('T')[0];
-    currentShipType = '';
-    document.querySelectorAll('.type-opt').forEach(t=>t.className='type-opt');
+    if (can('shipAll')) {
+      currentShipType = '';
+      document.querySelectorAll('.type-opt').forEach(t=>t.className='type-opt');
+    }
   }
   if (name === 'adjustStock') {
+    if (!can('adjustStock')) { toast('您沒有調整庫存的權限','error'); return; }
     document.getElementById('adj-product').innerHTML = '<option value="">請選擇商品</option>' +
       products.map(p=>`<option value="${p.id}">${p.name} ${p.spec}（現貨:${+p.currentStock||0}）</option>`).join('');
   }
@@ -670,6 +1012,7 @@ function closeModal(name) {
 }
 
 function selType(type, el) {
+  if (!can('shipAll') && type !== '公關出貨') return;
   currentShipType = type;
   const cls = {'電商出貨':'sel-ec','公關出貨':'sel-pr','員購出貨':'sel-staff','其他出貨':'sel-other'};
   document.querySelectorAll('.type-opt').forEach(t=>t.className='type-opt');
@@ -691,23 +1034,20 @@ async function submitShipping() {
   const price = parseInt(document.getElementById('s-price').value)||0;
   const p = products.find(x=>x.id===pid);
   if (p && +p.currentStock < qty) { toast(`庫存不足！現貨：${p.currentStock}`,'error'); return; }
-
   const btn = document.getElementById('submitShipBtn');
   btn.textContent='處理中...'; btn.disabled=true;
-
   try {
     const res = await postData({
       action:'addShipping',
       date: document.getElementById('s-date').value,
       type: currentShipType,
-      productId: pid,
-      qty, price,
+      productId: pid, qty, price,
       note: (document.getElementById('s-recipient').value||'') + (document.getElementById('s-note').value?' · '+document.getElementById('s-note').value:''),
       warehouse: document.getElementById('s-warehouse').value
     });
     if (res.ok) {
       closeModal('addShipping');
-      toast(`出貨記錄成功 ✓`,'success');
+      toast('出貨記錄成功 ✓','success');
       await refreshAll();
     } else { toast('出貨失敗，請重試','error'); }
   } catch(e) { toast('連線失敗','error'); }
@@ -732,6 +1072,38 @@ async function submitAdjust() {
   btn.textContent='確認調整'; btn.disabled=false;
 }
 
+async function submitAddUser() {
+  const name = document.getElementById('nu-name').value.trim();
+  const username = document.getElementById('nu-username').value.trim();
+  const password = document.getElementById('nu-password').value;
+  const role = document.getElementById('nu-role').value;
+  if (!name || !username || !password) { toast('請填寫所有欄位','error'); return; }
+  if (password.length < 6) { toast('密碼至少 6 碼','error'); return; }
+  const btn = document.getElementById('submitUserBtn');
+  btn.textContent='建立中...'; btn.disabled=true;
+  try {
+    const res = await postData({ action:'addUser', name, username, password, role });
+    if (res.ok) {
+      closeModal('addUser');
+      toast('帳號已建立 ✓','success');
+      renderUsers();
+      document.getElementById('nu-name').value='';
+      document.getElementById('nu-username').value='';
+      document.getElementById('nu-password').value='';
+    } else { toast('建立失敗：'+(res.error||'未知錯誤'),'error'); }
+  } catch(e) { toast('連線失敗','error'); }
+  btn.textContent='建立帳號'; btn.disabled=false;
+}
+
+async function deleteUser(username, name) {
+  if (!confirm(`確定要刪除帳號「${name}」嗎？`)) return;
+  try {
+    const res = await postData({ action:'deleteUser', targetUsername: username });
+    if (res.ok) { toast('帳號已刪除','success'); renderUsers(); }
+    else { toast('刪除失敗','error'); }
+  } catch(e) { toast('連線失敗','error'); }
+}
+
 // ── TOAST ─────────────────────────────────────────────
 function toast(msg, type='') {
   const t = document.getElementById('toast');
@@ -739,9 +1111,6 @@ function toast(msg, type='') {
   t.className = 'toast show' + (type?' '+type:'');
   setTimeout(()=>t.className='toast',3000);
 }
-
-// ── INIT ──────────────────────────────────────────────
-refreshAll();
 </script>
 </body>
 </html>
